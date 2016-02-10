@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class SpellListActivity extends AppCompatActivity {
 
@@ -35,10 +39,19 @@ public class SpellListActivity extends AppCompatActivity {
     /** URL for spell list ordered by spell school. */
     public final String SPELLS_BY_SCHOOL = "http://dnddb.site88.net/spellsBySchool.php";
 
+    /** JSON Parser object */
+    public DNDDB_JSON_Parser parser;
+
+    /** Array Adapter to use in the list view. */
+    public ArrayAdapter<String> spellsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spell_list);
+
+        // Create the JSON parser.
+        parser = new DNDDB_JSON_Parser();
 
         // Create objects to poll network status.
         ConnectivityManager manager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -56,9 +69,9 @@ public class SpellListActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Access Denied.");
         }
 
-        String[] spells = new String[]{"Fireball", "Magic Missile", "Lightning Bolt", "Cloud kill"};
+        //String[] spells = new String[]{"Fireball", "Magic Missile", "Lightning Bolt", "Cloud kill"};
 
-        ArrayAdapter<String> spellsAdapter = new ArrayAdapter<String>(this, R.layout.spell_list_item, R.id.spellList_item_textView, spells);
+        spellsAdapter = new ArrayAdapter<String>(this, R.layout.spell_list_item, R.id.spellList_item_textView, new ArrayList<String>());
 
         final ListView spellList = (ListView)findViewById(R.id.spellList_listView);
 
@@ -97,7 +110,18 @@ public class SpellListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result){
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+
+            try {
+                if(result != null){
+                    String[] finalResults = parser.ParseSpells(result);
+                    spellsAdapter.clear();
+                    for(String spellInfo : finalResults)
+                        spellsAdapter.add(spellInfo);
+                }
+            }
+            catch(Exception e){
+                Log.d(LOG_TAG, "Error parsing JSON data.");
+            }
         }
 
         /** Establishes a connection to the passed URL and retrieves the JSON data. */
