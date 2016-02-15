@@ -31,13 +31,13 @@ public class SpellListActivity extends AppCompatActivity {
     public final String LOG_TAG = "Spell List Activity - ";
 
     /** URL for spell list ordered by name. */
-    public final String SPELLS_BY_NAME = "http://dnddb.site88.net/spellsByName.php";
+    public final String ALL_SPELLS_BY_NAME = "http://dnddb.site88.net/AllSpellsByName.php";
 
     /** URL for spell list ordered by spell level. */
-    public final String SPELLS_BY_LEVEL = "http://dnddb.site88.net/spellsByLevel.php";
+    public final String ALL_SPELLS_BY_LEVEL = "http://dnddb.site88.net/AllSpellsByLevel.php";
 
     /** URL for spell list ordered by spell school. */
-    public final String SPELLS_BY_SCHOOL = "http://dnddb.site88.net/spellsBySchool.php";
+    public final String ALL_SPELLS_BY_SCHOOL = "http://dnddb.site88.net/AllSpellsBySchool.php";
 
     /** JSON Parser object */
     public DNDDB_JSON_Parser parser;
@@ -60,13 +60,13 @@ public class SpellListActivity extends AppCompatActivity {
         // Check to see if the network is available.
         if(info != null && info.isConnected()){
             Toast.makeText(this, "Network is connected.", Toast.LENGTH_SHORT).show();
-            Log.d(LOG_TAG, "Network is connected.");
+            //Log.d(LOG_TAG, "Network is connected.");
 
-            new JSONRetriever().execute(SPELLS_BY_NAME);
+            new JSONRetriever().execute(ALL_SPELLS_BY_NAME);
         }
         else{
-            Toast.makeText(this, "Access Denied.", Toast.LENGTH_SHORT).show();
-            Log.d(LOG_TAG, "Access Denied.");
+            Toast.makeText(this, "No Network Connection.", Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "No Network Connection.");
         }
 
         //String[] spells = new String[]{"Fireball", "Magic Missile", "Lightning Bolt", "Cloud kill"};
@@ -113,7 +113,7 @@ public class SpellListActivity extends AppCompatActivity {
 
             try {
                 if(result != null){
-                    String[] finalResults = parser.ParseSpells(result);
+                    String[] finalResults = parser.ParseSpellsForList(result);
                     spellsAdapter.clear();
                     for(String spellInfo : finalResults)
                         spellsAdapter.add(spellInfo);
