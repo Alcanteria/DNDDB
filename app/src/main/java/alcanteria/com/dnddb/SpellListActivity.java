@@ -45,6 +45,9 @@ public class SpellListActivity extends AppCompatActivity {
     /** Array Adapter to use in the list view. */
     public ArrayAdapter<String> spellsAdapter;
 
+    /** Array to store the spell id's of each item in the spell array adapter. */
+    public String[] spellIDArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,19 +72,20 @@ public class SpellListActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "No Network Connection.");
         }
 
-        //String[] spells = new String[]{"Fireball", "Magic Missile", "Lightning Bolt", "Cloud kill"};
-
         spellsAdapter = new ArrayAdapter<String>(this, R.layout.spell_list_item, R.id.spellList_item_textView, new ArrayList<String>());
 
         final ListView spellList = (ListView)findViewById(R.id.spellList_listView);
 
         spellList.setAdapter(spellsAdapter);
 
+        /************************************************* ON ITEM CLICK */
+
+        /** This handles the click events for each item in the spell list view. */
         spellList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String text = (String)spellList.getItemAtPosition(position);
+                String text = spellIDArray[position];
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG, text);
             }
@@ -93,11 +97,14 @@ public class SpellListActivity extends AppCompatActivity {
     private class JSONRetriever extends AsyncTask<String, Void, String>{
 
         @Override
+        /** This is the method called first in the async task chain. This connects to the URL
+         * and retrieves the query results as JSON data. */
         protected String doInBackground(String... url){
 
             String result = "Error.";
 
             try{
+                // Connect to the web and store the query result in this string.
                 result = GetJSONDataFromURL(url[0]);
             }
             catch(Exception e){
@@ -109,13 +116,22 @@ public class SpellListActivity extends AppCompatActivity {
         }
 
         @Override
+        /** This method is the last called in the async task chain. It converts the JSON string into
+         * an array of readable text. */
         protected void onPostExecute(String result){
 
             try {
                 if(result != null){
+
+                    // Store the final, parsed results into an array.
                     String[] finalResults = parser.ParseSpellsForList(result);
+
+                    // Separate the spell names from the above results and store them into a new array.
+                    String[] spellNameArray = FormatSpellArray(finalResults);
+
+                    // Clear out the old adapter and insert the new array data.
                     spellsAdapter.clear();
-                    for(String spellInfo : finalResults)
+                    for(String spellInfo : spellNameArray)
                         spellsAdapter.add(spellInfo);
                 }
             }
@@ -130,6 +146,7 @@ public class SpellListActivity extends AppCompatActivity {
             InputStream input;
             String inputAsString = "Poop.";
 
+            // Attempt to connect to the internet to make a database query. Store the query result as a string.
             try{
                 URL url = new URL(target);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -154,12 +171,15 @@ public class SpellListActivity extends AppCompatActivity {
             return inputAsString;
         }
 
+        /** Takes an input stream and converts it into a single string. */
         public String ConvertToString(InputStream stream) throws IOException{
+
+            // Set up the readers and builder to convert from an input stream into a string.
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
             String result;
             StringBuilder builder = new StringBuilder();
 
-            String line = null;
+            String line;
             while((line = reader.readLine()) != null){
                 builder.append(line + "\n");
             }
@@ -174,6 +194,24 @@ public class SpellListActivity extends AppCompatActivity {
             }
 
             return result;
+        }
+
+        /** Separates the spell ID and spell name from each entry in the array passed to this method. The array sent to this method
+         * has the spellID and the spell name merged together. */
+        public String[] FormatSpellArray(String[] array){
+
+            // Set the size of the spell id array to match the passed array size.
+            spellIDArray = new String[array.length];
+
+            // Create a new array to store the names of the spells.
+            String[] spellNames = new String[array.length];
+
+            for(int i = 0; i < array.length; i++){
+                spellIDArray[i] = array[i].substring(0, 9);
+                spellNames[i] = array[i].substring(9);
+            }
+
+            return spellNames;
         }
     }
 }

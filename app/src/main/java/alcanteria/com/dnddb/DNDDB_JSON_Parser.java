@@ -55,16 +55,17 @@ public class DNDDB_JSON_Parser {
         for(int i = 0; i < jsonArray.length(); i++){
 
             // Pieces of information we want to put in the final output string for each spell
-            String spellName;
+            String spellID, spellName;
 
             // Create a JSON object representing each spell.
             JSONObject spellObject = jsonArray.getJSONObject(i);
 
-            // Extract the name.
+            // Extract the ID and name.
+            spellID = spellObject.getString(SPELL_ID);
             spellName = spellObject.getString(SPELL_NAME);
 
             // Format the extracted spell info into the final result array.
-            spellsArray[i] = spellName;
+            spellsArray[i] = spellID + spellName;
         }
 
         return spellsArray;
