@@ -1,15 +1,23 @@
 package alcanteria.com.dnddb;
 
 import android.util.EventLogTags;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * Parses JSON strings into JSON Objects
  */
 public class DNDDB_JSON_Parser {
+
+    public final String LOG_TAG = "DNDDB JSON Parser";
 
     /** Indices for spell attribute in the array. */
     public static final int SPELL_ID_INDEX              =   0;
@@ -27,7 +35,7 @@ public class DNDDB_JSON_Parser {
     public static final int SPELL_DESCRIPTION_INDEX     =   12;
 
     // This is the total number of items a spell can have. The total of the above group of indices.
-    private final int NUMBER_OF_SPELL_ELEMENTS = 13;
+    public static final int NUMBER_OF_SPELL_ELEMENTS = 13;
 
     public DNDDB_JSON_Parser(){
 
@@ -125,7 +133,37 @@ public class DNDDB_JSON_Parser {
 
         }
 
+        /*for(int i = 0; i < jsonArray.length(); i++){
+            for(int j = 0; j < NUMBER_OF_SPELL_ELEMENTS; j++){
+                Log.d(LOG_TAG, spellsArray[i][j]);
+            }
+        }*/
+
         return spellsArray;
 
+    }
+
+    /** Takes an input stream and converts it into a single string. */
+    public String ConvertToString(InputStream stream) throws IOException {
+
+        // Set up the readers and builder to convert from an input stream into a string.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
+        String result;
+        StringBuilder builder = new StringBuilder();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line + "\n");
+        }
+        result = builder.toString();
+
+        try {
+            if (stream != null)
+                stream.close();
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Couldn't close input stream.");
+        }
+
+        return result;
     }
 }

@@ -4,11 +4,11 @@
 
     <!-- Main Menu Strings -->
 
-        <string name="main_title_text">D&amp;D Database</string>
-        <string name="main_spellList_buttonText">Spells</string>
-        <string name="main_exit_buttonText">Exit</string>
+    <string name="main_title_text">D&amp;D Database</string>
+    <string name="main_spellList_buttonText">Spells</string>
+    <string name="main_exit_buttonText">Exit</string>
 
     <!-- Spell List Activity Strings -->
 
-        <string name="spellList_title_text">Spells</string>
+    <string name="spellList_title_text">Spells</string>
 </resources>
