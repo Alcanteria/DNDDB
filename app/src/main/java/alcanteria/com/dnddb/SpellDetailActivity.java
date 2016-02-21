@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -111,7 +112,8 @@ public class SpellDetailActivity extends AppCompatActivity {
                     spellNameTextView.setText               (SPELL[0][DNDDB_JSON_Parser.SPELL_NAME_INDEX]);
                     spellLevelTextView.setText              (SPELL[0][DNDDB_JSON_Parser.SPELL_LEVEL_INDEX]);
                     spellSchoolTextView.setText             (SPELL[0][DNDDB_JSON_Parser.SPELL_SCHOOL_INDEX]);
-                    spellDescriptionTextView.setText        (SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]);
+                    //spellDescriptionTextView.setText        (SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]);
+                    spellDescriptionTextView.setText        (Html.fromHtml(SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]));
                 }
             } catch (Exception e) {
                 Log.d(LOG_TAG, "Error parsing JSON data.");
