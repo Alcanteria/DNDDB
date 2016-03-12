@@ -128,7 +128,11 @@ public class SpellListActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 Log.d(LOG_TAG, "Error parsing JSON data.");
+                Toast.makeText(getApplicationContext(), "Could not load spell list.", Toast.LENGTH_LONG).show();
             }
+
+            // Hide the loading icon
+            findViewById(R.id.spell_list_progressBar).setVisibility(View.GONE);
         }
     }
 

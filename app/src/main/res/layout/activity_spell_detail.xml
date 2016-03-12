@@ -15,6 +15,13 @@
         tools:context="alcanteria.com.dnddb.SpellDetailActivity"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spell_detail_progressBar"
+            android:indeterminate="true"
+            android:layout_gravity="center_horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

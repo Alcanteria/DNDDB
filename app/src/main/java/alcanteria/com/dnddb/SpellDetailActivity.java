@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,6 +120,8 @@ public class SpellDetailActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d(LOG_TAG, "Error parsing JSON data.");
             }
+
+            findViewById(R.id.spell_detail_progressBar).setVisibility(View.GONE);
         }
 
         /************************************************************************************************************ */
