@@ -23,7 +23,7 @@ import java.net.URL;
 
 public class SpellDetailActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = "Spell Detail Activity";
+    private final String LOG_TAG = SpellDetailActivity.class.getSimpleName();
 
     /** Array to store the selected spell's details. */
     public String[][] SPELL;
@@ -37,7 +37,10 @@ public class SpellDetailActivity extends AppCompatActivity {
     /** Text views that display the spell information. */
     TextView spellNameTextView;
     TextView spellLevelTextView;
-    TextView spellSchoolTextView;
+    TextView spellCastTimeTextView;
+    TextView spellRangeTextView;
+    TextView spellComponentTextView;
+    TextView spellDurationTextView;
     TextView spellDescriptionTextView;
 
     @Override
@@ -58,7 +61,10 @@ public class SpellDetailActivity extends AppCompatActivity {
         // Link all of the views to their respective resources.
         spellNameTextView          = (TextView)findViewById(R.id.spell_detail_name);
         spellLevelTextView         = (TextView)findViewById(R.id.spell_detail_level);
-        spellSchoolTextView        = (TextView)findViewById(R.id.spell_detail_school);
+        spellCastTimeTextView      = (TextView)findViewById(R.id.spell_detail_castTime);
+        spellRangeTextView         = (TextView)findViewById(R.id.spell_detail_range);
+        spellComponentTextView     = (TextView)findViewById(R.id.spell_detail_components);
+        spellDurationTextView      = (TextView)findViewById(R.id.spell_detail_duration);
         spellDescriptionTextView   = (TextView)findViewById(R.id.spell_detail_description);
 
         // Create objects to poll network status.
@@ -107,13 +113,8 @@ public class SpellDetailActivity extends AppCompatActivity {
             try {
                 if (result != null) {
 
-                   SPELL = result;
+                    FormatSpellDetailDisplay(result);
 
-                    spellNameTextView.setText               (SPELL[0][DNDDB_JSON_Parser.SPELL_NAME_INDEX]);
-                    spellLevelTextView.setText              (SPELL[0][DNDDB_JSON_Parser.SPELL_LEVEL_INDEX]);
-                    spellSchoolTextView.setText             (SPELL[0][DNDDB_JSON_Parser.SPELL_SCHOOL_INDEX]);
-                    //spellDescriptionTextView.setText        (SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]);
-                    spellDescriptionTextView.setText        (Html.fromHtml(SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]));
                 }
             } catch (Exception e) {
                 Log.d(LOG_TAG, "Error parsing JSON data.");
@@ -121,5 +122,51 @@ public class SpellDetailActivity extends AppCompatActivity {
         }
 
         /************************************************************************************************************ */
+    }
+
+
+    /** Check what information exists in the queried spell and format the display accordingly. */
+    public void FormatSpellDetailDisplay(String[][] spell){
+
+        SPELL = spell;
+
+        spellNameTextView.setText               (SPELL[0][DNDDB_JSON_Parser.SPELL_NAME_INDEX]);
+
+        /** Convert the spell level to a int so we can check if it is less than 1, meaning it's a cantrip. */
+        int level = Integer.parseInt(SPELL[0][DNDDB_JSON_Parser.SPELL_LEVEL_INDEX]);
+
+        /** Format the spell level view to say "School - Cantrip" if it's a level 0 spell. */
+        if(level < 1){
+            spellLevelTextView.setText(SPELL[0][DNDDB_JSON_Parser.SPELL_SCHOOL_INDEX] + " Cantrip");
+        }
+        else{
+            /** Format the spell level view to say "Level * School Spell" if the spell is not level 0. */
+            spellLevelTextView.setText("Level " + SPELL[0][DNDDB_JSON_Parser.SPELL_LEVEL_INDEX] + " " + SPELL[0][DNDDB_JSON_Parser.SPELL_SCHOOL_INDEX]);
+        }
+
+        /** Check if the spell is a ritual and add that extra info at the end of the level text view if it is. */
+        if(!SPELL[0][DNDDB_JSON_Parser.SPELL_RITUAL_INDEX].isEmpty()){
+            spellLevelTextView.setText(spellLevelTextView.getText() + " (Ritual)");
+        }
+
+        spellCastTimeTextView.setText("Cast Time: " + SPELL[0][DNDDB_JSON_Parser.SPELL_CAST_TIME_INDEX]);
+        spellRangeTextView.setText("Range : " + SPELL[0][DNDDB_JSON_Parser.SPELL_RANGE_INDEX]);
+
+        /** Check which component values are present in this spell's detail and set the text view accordingly. */
+        if(!SPELL[0][DNDDB_JSON_Parser.SPELL_VOCAL_INDEX].isEmpty())
+            spellComponentTextView.setText("V");
+        if(!SPELL[0][DNDDB_JSON_Parser.SPELL_SOMATIC_INDEX].isEmpty())
+            spellComponentTextView.setText(spellComponentTextView.getText() + ", S");
+        if(!SPELL[0][DNDDB_JSON_Parser.SPELL_MATERIAL_INDEX].isEmpty())
+            spellComponentTextView.setText(spellComponentTextView.getText() + " M (" + SPELL[0][DNDDB_JSON_Parser.SPELL_MATERIAL_INDEX] + ")");
+
+        /** Check if the spell requires concentration and set the spell duration text view accordingly. */
+        if(!SPELL[0][DNDDB_JSON_Parser.SPELL_CONCENTRATION_INDEX].isEmpty())
+            spellDurationTextView.setText(Html.fromHtml("<b>Concentration</b>, " + SPELL[0][DNDDB_JSON_Parser.SPELL_DURATION_INDEX]));
+        else
+            spellDurationTextView.setText(SPELL[0][DNDDB_JSON_Parser.SPELL_DURATION_INDEX]);
+
+        spellDescriptionTextView.setText(Html.fromHtml(SPELL[0][DNDDB_JSON_Parser.SPELL_DESCRIPTION_INDEX]));
+
     }
 }
