@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SpellListActivity extends AppCompatActivity {
+public class SpellListByNameActivity extends AppCompatActivity {
 
     public final String LOG_TAG = "Spell List Activity - ";
 
@@ -77,7 +77,7 @@ public class SpellListActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, text);
 
                 // Create an intent and pack in the spell ID for the selected spell.
-                Intent intent = new Intent(SpellListActivity.this, SpellDetailActivity.class);
+                Intent intent = new Intent(SpellListByNameActivity.this, SpellDetailActivity.class);
                 intent.putExtra("SpellID", text);
                 startActivity(intent);
             }

@@ -10,5 +10,6 @@
 
     <!-- Spell List Activity Strings -->
 
-    <string name="spellList_title_text">Spells</string>
+    <string name="spellListByName_title_text">Spells By Name</string>
+    <string name="spellListByLevel_title_text">Spells By Level</string>
 </resources>

@@ -18,8 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SpellListActivity" />
-        <activity android:name=".SpellDetailActivity"></activity>
+        <activity android:name=".SpellListByNameActivity" />
+        <activity android:name=".SpellDetailActivity" />
+        <activity android:name=".SpellListByLevelActivity"></activity>
     </application>
 
 </manifest>
