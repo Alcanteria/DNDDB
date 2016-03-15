@@ -22,7 +22,7 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spell_list_progressBar"
+        android:id="@+id/spell_list_by_name_progressBar"
         android:indeterminate="true"
         android:layout_gravity="center_horizontal" />
 

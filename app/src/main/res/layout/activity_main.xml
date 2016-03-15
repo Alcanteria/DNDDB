@@ -24,4 +24,11 @@
         android:text="@string/main_spellList_buttonText"
         android:id="@+id/main_spellList_button"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_spellList_by_level_buttonText"
+        android:id="@+id/main_spellList_by_level_button"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

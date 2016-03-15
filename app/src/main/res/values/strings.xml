@@ -5,7 +5,8 @@
     <!-- Main Menu Strings -->
 
     <string name="main_title_text">D&amp;D Database</string>
-    <string name="main_spellList_buttonText">Spells</string>
+    <string name="main_spellList_buttonText">Spells By Name</string>
+    <string name="main_spellList_by_level_buttonText">Spells By Level</string>
     <string name="main_exit_buttonText">Exit</string>
 
     <!-- Spell List Activity Strings -->

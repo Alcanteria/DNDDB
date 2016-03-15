@@ -35,7 +35,7 @@ public class SpellListByNameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spell_list);
+        setContentView(R.layout.activity_spell_list_by_name);
 
         // Adapter to use in the list view.
         spellsAdapter = new ArrayAdapter<String>(this, R.layout.spell_list_item, R.id.spellList_item_textView, new ArrayList<String>());
@@ -132,7 +132,7 @@ public class SpellListByNameActivity extends AppCompatActivity {
             }
 
             // Hide the loading icon
-            findViewById(R.id.spell_list_progressBar).setVisibility(View.GONE);
+            findViewById(R.id.spell_list_by_name_progressBar).setVisibility(View.GONE);
         }
     }
 

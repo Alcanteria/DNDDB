@@ -10,19 +10,25 @@ import java.net.URL;
 /** Creates a network connection and retrieves any desired data.  */
 public class DNDDB_NetworkConnector {
 
-    public final String LOG_TAG = "DNDDB_NetworkConnector";
+    public final String LOG_TAG = DNDDB_NetworkConnector.class.getSimpleName();
 
     /** URL for spell list ordered by name. */
     public static final String ALL_SPELLS_BY_NAME = "http://dnddb.site88.net/AllSpellsByName.php";
 
     /** URL for spell list ordered by spell level. */
-    public static final String ALL_SPELLS_BY_LEVEL = "http://dnddb.site88.net/AllSpellsByLevel.php";
+    //public static final String ALL_SPELLS_BY_LEVEL = "http://dnddb.site88.net/AllSpellsByLevel.php";
 
     /** URL for spell list ordered by spell school. */
     public static final String ALL_SPELLS_BY_SCHOOL = "http://dnddb.site88.net/AllSpellsBySchool.php";
 
     /** URL for finding a spell by its Spell ID. */
     public static final String SPELL_BY_ID = "http://dnddb.site88.net/SpellByID.php?spell=";
+
+    /** URL for getting spells of the supplied level. */
+    public static final String SPELLS_BY_LEVEL = "http://dnddb.site88.net/SpellsByLevel.php?level=";
+
+    /** URL for getting the number of distinct spell levels in  the table. */
+    public static final String NUMBER_OF_DISTINCT_LEVELS = "http://dnddb.site88.net/GetDistinctSpellLevels.php";
 
     /** Tool to parse JSON data into a string. */
     private DNDDB_JSON_Parser parser;
@@ -58,6 +64,36 @@ public class DNDDB_NetworkConnector {
             inputAsString = parser.ConvertToString(input);
         } catch (IOException e) {
             Log.d(LOG_TAG, "Problem connecting to URL and/or getting JSON data.");
+        }
+
+        return inputAsString;
+    }
+
+    /** Establishes a connection to the passed URL and retrieves the result as a string. */
+    public String GetStringDataFromURL(String target) throws IOException {
+
+        InputStream input;
+        String inputAsString = "Poop";
+
+        // Attempt to connect to the internet to make a database query. Store the query result as a string.
+        try {
+            URL url = new URL(target);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(20000);
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+
+            // Starts the query.
+            connection.connect();
+            int response = connection.getResponseCode();
+            Log.d(LOG_TAG, "Connection response = " + response);
+            input = connection.getInputStream();
+
+            // Convert the input stream into a string.
+            inputAsString = parser.ConvertToString(input);
+        } catch (IOException e) {
+            Log.d(LOG_TAG, "Problem connecting to URL.");
         }
 
         return inputAsString;

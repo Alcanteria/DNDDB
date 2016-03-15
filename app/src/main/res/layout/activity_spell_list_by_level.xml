@@ -18,4 +18,10 @@
         android:id="@+id/spell_list_by_level_title"
         android:textAlignment="center"
         android:layout_gravity="center_horizontal" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spell_list_by_level_progressBar"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
